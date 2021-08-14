@@ -4,8 +4,10 @@ import Chat from "./Chat";
 import Sidebar from "./Sidebar";
 import Pusher from "pusher-js";
 import axios from "./axios.js";
+import Login from "./Login.js";
+import { connect } from "react-redux";
 
-function App() {
+function App({ currentUser }) {
     const [messages, setMessages] = useState([]);
 
     useEffect(() => {
@@ -30,16 +32,26 @@ function App() {
         };
     }, [messages]);
 
-    console.log(messages);
-
+    console.log("app: message", messages);
+    console.log("app: current user is", currentUser.email);
     return (
         <div className="app">
             <div className="app__body">
-                <Sidebar />
-                <Chat messages={messages} />
+                {!currentUser.email ? (
+                    <Login />
+                ) : (
+                    <>
+                        <Sidebar />
+                        <Chat messages={messages} />
+                    </>
+                )}
             </div>
         </div>
     );
 }
 
-export default App;
+export default connect((user) => {
+    return {
+        currentUser: user,
+    };
+})(App);

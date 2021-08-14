@@ -1,0 +1,25 @@
+.login {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: column;
+    width: 100vw;
+}
+.login__icon {
+    width: 300px;
+    height: 300px;
+}
+
+.login > button {
+    padding: 10px 100px;
+    color: white;
+    background-color: #07bc4c;
+    border-radius: 5px;
+    border: 0;
+    font-weight: bold;
+}
+
+.login > button:hover {
+    color: white;
+    background-color: #0fd35a;
+}

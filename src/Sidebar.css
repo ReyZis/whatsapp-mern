@@ -10,6 +10,15 @@
     padding: 20px;
     border-right: 1px solid lightgray;
 }
+.sidebar__headerLeft {
+    display: flex;
+    align-items: center;
+}
+.sidebar__name {
+    font-weight: bold;
+    margin-left: 20px;
+    font-size: medium;
+}
 
 .sidebar__headerRight {
     display: flex;
