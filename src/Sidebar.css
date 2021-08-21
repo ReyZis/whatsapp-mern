@@ -1,7 +1,7 @@
 .sidebar {
     display: flex;
     flex-direction: column;
-    flex: 0.35;
+    flex: 0.25;
 }
 
 .sidebar__header {
@@ -53,6 +53,7 @@
     color: gray;
     padding: 10px;
 }
+
 .sidebar__searchContainer > input {
     border: none;
     margin-left: 10px;
@@ -62,5 +63,28 @@
 .sidebar__chats {
     flex: 1;
     background-color: white;
-    overflow: auto;
+    overflow: scroll;
+}
+
+.sidebar__addChatText {
+    font-size: larger;
+    margin-left: 25px;
+}
+
+.sidebar__chats > .MuiButton-root {
+    width: 99%;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 2px 2px 5px 2px;
+}
+
+.sidebar__dialogButton,
+.MuiInputLabel-root.Mui-focused {
+    color: #07bc4c !important;
+}
+
+.MuiInput-underline:after {
+    border-bottom: 2px solid #07bc4c !important;
 }

@@ -6,13 +6,16 @@ import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
 
-function reducer(currentUser, action) {
+function reducer(currentStore, action) {
     const initialStore = {
         email: null,
+        activeRoom: null,
     };
     switch (action.type) {
         case "SET_USER":
-            return action.newUser;
+            return { ...action.data, activeRoom: currentStore.activeRoom };
+        case "SET_ROOM":
+            return { ...currentStore, activeRoom: action.data.activeRoom };
         default:
             return initialStore;
     }
