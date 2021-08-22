@@ -25,34 +25,26 @@ import SidebarChat from "./SidebarChat";
 import "./Sidebar.css";
 import axios from "./axios.js";
 
-const setActiveRoom = (roomId) => {
-    return {
-        type: "SET_ROOM",
-        data: {
-            activeRoom: roomId,
-        },
-    };
-};
+import { setActiveRoom } from "./reducer";
 
-function Sidebar({ currentStore, setActiveRoom }) {
+
+function Sidebar({ user, setActiveRoom }) {
     const [roomsList, setRoomsList] = useState([]);
     const [open, setOpen] = useState(false);
     const [input, setInput] = useState("");
 
     useEffect(() => {
-        console.log("sidebar: current user is", currentStore.email);
+        console.log("sidebar: current user is", user.email);
 
-        axios
-            .post("/rooms/sync", { email: currentStore.email })
-            .then((response) => {
-                console.log(
-                    "sidebar: the current response data from getting the rooms list is ",
-                    response.data
-                );
-                setRoomsList([...response.data]);
-                setActiveRoom(response.data[0]._id);
-            });
-    }, [currentStore.email, setActiveRoom]);
+        axios.post("/rooms/sync", { email: user.email }).then((response) => {
+            console.log(
+                "sidebar: the current response data from getting the rooms list is ",
+                response.data
+            );
+            setRoomsList([...response.data]);
+            setActiveRoom(response.data[0]._id);
+        });
+    }, [user.email, setActiveRoom]);
 
     const handleClose = () => {
         setOpen(false);
@@ -63,7 +55,7 @@ function Sidebar({ currentStore, setActiveRoom }) {
         if (input) {
             axios
                 .post("/rooms/new", {
-                    userOne: currentStore.email,
+                    userOne: user.email,
                     userTwo: input,
                     lastMessage: "start a conversation now!!",
                 })
@@ -87,10 +79,8 @@ function Sidebar({ currentStore, setActiveRoom }) {
         <div className="sidebar">
             <div className="sidebar__header">
                 <div className="sidebar__headerLeft">
-                    <Avatar src={currentStore.photoURL} />
-                    <span className="sidebar__name">
-                        {currentStore.displayName}
-                    </span>
+                    <Avatar src={user.photoURL} />
+                    <span className="sidebar__name">{user.displayName}</span>
                 </div>
                 <div className="sidebar__headerRight">
                     <IconButton>
@@ -127,7 +117,7 @@ function Sidebar({ currentStore, setActiveRoom }) {
                     >
                         <SidebarChat
                             roomEmail={
-                                room.userOne !== currentStore.email
+                                room.userOne !== user.email
                                     ? room.userOne
                                     : room.userTwo
                             }
@@ -187,8 +177,8 @@ function Sidebar({ currentStore, setActiveRoom }) {
 }
 
 export default connect(
-    (user) => {
-        return { currentStore: user };
+    (currentStore) => {
+        return { user: currentStore.user };
     },
     {
         setActiveRoom,

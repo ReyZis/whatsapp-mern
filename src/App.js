@@ -7,14 +7,17 @@ import axios from "./axios.js";
 import Login from "./Login.js";
 import { connect } from "react-redux";
 
-function App({ currentStore }) {
-    
+function App({ user }) {
+    console.log("app: current user is", user);
 
-    console.log("app: current user is", currentStore);
+    useEffect(() => {
+       
+    }, [user])
+    
     return (
         <div className="app">
             <div className="app__body">
-                {!currentStore.email ? (
+                {!user.email ? (
                     <Login />
                 ) : (
                     <>
@@ -27,8 +30,8 @@ function App({ currentStore }) {
     );
 }
 
-export default connect((user) => {
+export default connect((currentStore) => {
     return {
-        currentStore: user,
+        user: currentStore.user,
     };
 })(App);

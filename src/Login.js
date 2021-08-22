@@ -5,19 +5,14 @@ import { Button } from "@material-ui/core";
 import { provider, auth } from "./firebase";
 import { connect } from "react-redux";
 import axios from "./axios.js";
+import { setUser } from "./reducer.js";
 
-function setUserTo(user) {
-    return {
-        type: "SET_USER",
-        data: user,
-    };
-}
 
-function Login({ setUserTo }) {
+function Login({ setUser, user }) {
     const login = () => {
         auth.signInWithPopup(provider)
             .then(async (result) => {
-                setUserTo(result.user);
+                setUser(result.user);
                 await axios.post("/users/new", {
                     name: result.user.displayName,
                     email: result.user.email,
@@ -44,12 +39,12 @@ function Login({ setUserTo }) {
 }
 
 export default connect(
-    (user) => {
+    (currentStore) => {
         return {
-            currentStore: user,
+            user: currentStore.user,
         };
     },
     {
-        setUserTo,
+        setUser,
     }
 )(Login);
