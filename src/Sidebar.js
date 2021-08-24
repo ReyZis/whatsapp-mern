@@ -25,26 +25,11 @@ import SidebarChat from "./SidebarChat";
 import "./Sidebar.css";
 import axios from "./axios.js";
 
-import { setActiveRoom } from "./reducer";
+import { setActiveRoom, setRooms } from "./reducer";
 
-
-function Sidebar({ user, setActiveRoom }) {
-    const [roomsList, setRoomsList] = useState([]);
+function Sidebar({ user, rooms, setRooms }) {
     const [open, setOpen] = useState(false);
     const [input, setInput] = useState("");
-
-    useEffect(() => {
-        console.log("sidebar: current user is", user.email);
-
-        axios.post("/rooms/sync", { email: user.email }).then((response) => {
-            console.log(
-                "sidebar: the current response data from getting the rooms list is ",
-                response.data
-            );
-            setRoomsList([...response.data]);
-            setActiveRoom(response.data[0]._id);
-        });
-    }, [user.email, setActiveRoom]);
 
     const handleClose = () => {
         setOpen(false);
@@ -57,11 +42,11 @@ function Sidebar({ user, setActiveRoom }) {
                 .post("/rooms/new", {
                     userOne: user.email,
                     userTwo: input,
-                    lastMessage: "start a conversation now!!",
+                    messages: [],
                 })
                 .then((response) => {
                     if (response.data !== "this room already exist") {
-                        setRoomsList([...roomsList, response.data]);
+                        setRooms([...rooms, response.data]);
                         console.log(
                             "sidebar: the current rooms list after making new one is ",
                             response.data
@@ -105,25 +90,8 @@ function Sidebar({ user, setActiveRoom }) {
                     <AddIcon fontSize="large" />
                     <h2 className="sidebar__addChatText">Add a chat</h2>
                 </Button>
-                {roomsList.map((room) => (
-                    <div
-                        onClick={() => {
-                            console.log(
-                                "sidebar: the current active room's id is :",
-                                room._id
-                            );
-                            setActiveRoom(room._id);
-                        }}
-                    >
-                        <SidebarChat
-                            roomEmail={
-                                room.userOne !== user.email
-                                    ? room.userOne
-                                    : room.userTwo
-                            }
-                            lastMessage={room.lastMessage}
-                        />
-                    </div>
+                {rooms.map((room) => (
+                    <SidebarChat roomDetails={room} />
                 ))}
             </div>
             <Dialog
@@ -178,9 +146,13 @@ function Sidebar({ user, setActiveRoom }) {
 
 export default connect(
     (currentStore) => {
-        return { user: currentStore.user };
+        return {
+            user: currentStore.user,
+            rooms: currentStore.rooms,
+        };
     },
     {
         setActiveRoom,
+        setRooms,
     }
 )(Sidebar);

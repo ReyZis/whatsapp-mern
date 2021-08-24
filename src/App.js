@@ -6,14 +6,15 @@ import Pusher from "pusher-js";
 import axios from "./axios.js";
 import Login from "./Login.js";
 import { connect } from "react-redux";
+import { setActiveRoom, setRooms } from "./reducer.js";
 
-function App({ user }) {
+function App({ user, setActiveRoom, rooms }) {
     console.log("app: current user is", user);
 
     useEffect(() => {
-       
-    }, [user])
-    
+        console.log("app: the current rooms list in redux is", rooms);
+    }, [rooms]);
+
     return (
         <div className="app">
             <div className="app__body">
@@ -30,8 +31,15 @@ function App({ user }) {
     );
 }
 
-export default connect((currentStore) => {
-    return {
-        user: currentStore.user,
-    };
-})(App);
+export default connect(
+    (currentStore) => {
+        return {
+            user: currentStore.user,
+            rooms: currentStore.rooms,
+        };
+    },
+    {
+        setActiveRoom,
+        setRooms,
+    }
+)(App);

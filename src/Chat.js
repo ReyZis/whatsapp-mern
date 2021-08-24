@@ -1,5 +1,5 @@
+import React, { useEffect, useRef, useState } from "react";
 import { Avatar, IconButton } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
 import "./Chat.css";
 import { SearchOutlined, MoreVert, AttachFile } from "@material-ui/icons";
 import InsertEmoticonIcon from "@material-ui/icons/InsertEmoticon";
@@ -8,21 +8,17 @@ import axios from "./axios.js";
 import Pusher from "pusher-js";
 import { connect } from "react-redux";
 
-function Chat({ activeRoom, user }) {
+function Chat({ activeRoom, user, roomName, roomPic }) {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
 
     useEffect(() => {
-        axios
-            .post("/messages/sync", {
-                _id: activeRoom,
-            })
-            .then((response) => {
-                const resMsg = response.data;
-                setMessages(response.data);
-                console.log("chat: this is the room's messages", resMsg);
-            });
+        console.log("chat: the active room is", activeRoom);
+        setMessages(activeRoom.messages);
+        console.log("chat: the messages is", activeRoom.messages);
     }, [activeRoom, setMessages]);
+
+    const refrence = useRef(null);
 
     useEffect(() => {
         const pusher = new Pusher("b9cd2c6dddef57e9452d", {
@@ -31,10 +27,11 @@ function Chat({ activeRoom, user }) {
 
         const channel = pusher.subscribe("rooms");
         channel.bind("new message", (newMessage) => {
-            console.log(newMessage);
+            console.log("chat: a messages came from puhser", newMessage);
             setMessages([...messages, newMessage]);
         });
 
+        refrence.current.scrollIntoView({ behavior: "smooth" });
         return () => {
             channel.unbind_all();
             channel.unsubscribe();
@@ -54,9 +51,9 @@ function Chat({ activeRoom, user }) {
     return (
         <div className="chat">
             <div className="chat__header">
-                <Avatar />
+                <Avatar src={roomPic} />
                 <div className="chat__headerInfo">
-                    <h3>Room Name</h3>
+                    <h3>{roomName || "Room Name"}</h3>
                     <p>last seen at...</p>
                 </div>
 
@@ -89,6 +86,7 @@ function Chat({ activeRoom, user }) {
                         </p>
                     );
                 })}
+                <div ref={refrence}></div>
             </div>
             <div className="chat__footer">
                 <InsertEmoticonIcon />
@@ -113,5 +111,7 @@ export default connect((currentStore) => {
     return {
         activeRoom: currentStore.activeRoom,
         user: currentStore.user,
+        roomName: currentStore.activeRoomName,
+        roomPic: currentStore.activeRoomPic,
     };
 })(Chat);

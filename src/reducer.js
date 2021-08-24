@@ -1,19 +1,38 @@
 import { createStore } from "redux";
 
 // action creators
-function setUser(user) {
+const setUser = (user) => {
     return {
         type: "SET_USER",
         data: user,
     };
-}
+};
 
-const setActiveRoom = (roomId) => {
+const setActiveRoom = (roomData) => {
     return {
-        type: "SET_ROOM",
-        data: {
-            activeRoom: roomId,
-        },
+        type: "SET_ACT_ROOM",
+        data: roomData,
+    };
+};
+
+const setActiveRoomName = (name) => {
+    return {
+        type: "SET_ACT_NAME",
+        data: name,
+    };
+};
+
+const setActiveRoomPic = (url) => {
+    return {
+        type: "SET_ACT_PIC",
+        data: url,
+    };
+};
+
+const setRooms = (roomArr) => {
+    return {
+        type: "SET_ROOMS",
+        data: roomArr,
     };
 };
 
@@ -24,17 +43,23 @@ function reducer(currentStore, action) {
             email: null,
         },
         rooms: [],
-        activeRoom: null,
+        activeRoom: {
+            messages: [],
+        },
+        activeRoomName: "",
+        activeRoomPic: "",
     };
     switch (action.type) {
         case "SET_USER":
-            return {
-                user: action.data,
-                activeRoom: currentStore.activeRoom,
-                rooms: currentStore.rooms,
-            };
-        case "SET_ROOM":
-            return { ...currentStore, activeRoom: action.data.activeRoom };
+            return { ...currentStore, user: action.data };
+        case "SET_ACT_ROOM":
+            return { ...currentStore, activeRoom: action.data };
+        case "SET_ACT_NAME":
+            return { ...currentStore, activeRoomName: action.data };
+        case "SET_ACT_PIC":
+            return { ...currentStore, activeRoomPic: action.data };
+        case "SET_ROOMS":
+            return { ...currentStore, rooms: action.data };
         default:
             return initialStore;
     }
@@ -42,6 +67,12 @@ function reducer(currentStore, action) {
 
 const appStore = createStore(reducer);
 
-export { setUser, setActiveRoom };
+export {
+    setUser,
+    setActiveRoom,
+    setRooms,
+    setActiveRoomName,
+    setActiveRoomPic,
+};
 
 export default appStore;
