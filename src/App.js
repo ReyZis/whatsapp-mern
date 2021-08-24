@@ -9,12 +9,6 @@ import { connect } from "react-redux";
 import { setActiveRoom, setRooms } from "./reducer.js";
 
 function App({ user, setActiveRoom, rooms }) {
-    console.log("app: current user is", user);
-
-    useEffect(() => {
-        console.log("app: the current rooms list in redux is", rooms);
-    }, [rooms]);
-
     return (
         <div className="app">
             <div className="app__body">

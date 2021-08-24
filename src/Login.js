@@ -34,18 +34,13 @@ function Login({
                     rooms: [],
                 });
 
-                console.log("login: current user is", result.user);
-
                 await axios
                     .post("/rooms/sync", { email: result.user.email })
                     .then((response) => {
-                        console.log(
-                            "login: the current response data from getting the rooms list is ",
-                            response.data
-                        );
-
                         setRooms([...response.data]);
                         setActiveRoom(response.data[0]);
+
+                        // this var is just for getting the room name and pic in the next axios post
                         room = response.data[0];
                     });
 

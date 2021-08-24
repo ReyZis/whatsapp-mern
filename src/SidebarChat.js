@@ -38,10 +38,6 @@ function SidebarChat({
         <div
             className="sidebarChat"
             onClick={() => {
-                console.log(
-                    "SidebarChat: the current active room's id is :",
-                    roomDetails
-                );
                 setActiveRoom(roomDetails);
                 setActiveRoomName(compUser.name);
                 setActiveRoomPic(compUser.photo);

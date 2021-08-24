@@ -47,10 +47,6 @@ function Sidebar({ user, rooms, setRooms }) {
                 .then((response) => {
                     if (response.data !== "this room already exist") {
                         setRooms([...rooms, response.data]);
-                        console.log(
-                            "sidebar: the current rooms list after making new one is ",
-                            response.data
-                        );
                     }
                 });
             setOpen(false);

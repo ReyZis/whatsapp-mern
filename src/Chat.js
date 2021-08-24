@@ -13,9 +13,7 @@ function Chat({ activeRoom, user, roomName, roomPic }) {
     const [input, setInput] = useState("");
 
     useEffect(() => {
-        console.log("chat: the active room is", activeRoom);
         setMessages(activeRoom.messages);
-        console.log("chat: the messages is", activeRoom.messages);
     }, [activeRoom, setMessages]);
 
     const refrence = useRef(null);
@@ -27,7 +25,7 @@ function Chat({ activeRoom, user, roomName, roomPic }) {
 
         const channel = pusher.subscribe("rooms");
         channel.bind("new message", (newMessage) => {
-            console.log("chat: a messages came from puhser", newMessage);
+            // a message came from db due to puhser's trigger system
             setMessages([...messages, newMessage]);
         });
 
