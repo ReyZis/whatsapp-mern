@@ -13,7 +13,9 @@ function Chat({ activeRoom, user, roomName, roomPic }) {
     const [input, setInput] = useState("");
 
     useEffect(() => {
-        setMessages(activeRoom.messages);
+        if (activeRoom) {
+            setMessages(activeRoom.messages);
+        }
     }, [activeRoom, setMessages]);
 
     const refrence = useRef(null);

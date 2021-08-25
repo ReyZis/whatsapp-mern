@@ -43,18 +43,19 @@ function Login({
                         // this var is just for getting the room name and pic in the next axios post
                         room = response.data[0];
                     });
-
-                await axios
-                    .post("/users/sync", {
-                        email:
-                            room.userOne !== result.user.email
-                                ? room.userOne
-                                : room.userTwo,
-                    })
-                    .then((response) => {
-                        setActiveRoomName(response.data.name);
-                        setActiveRoomPic(response.data.photo);
-                    });
+                if (room) {
+                    await axios
+                        .post("/users/sync", {
+                            email:
+                                room.userOne !== result.user.email
+                                    ? room.userOne
+                                    : room.userTwo,
+                        })
+                        .then((response) => {
+                            setActiveRoomName(response.data.name);
+                            setActiveRoomPic(response.data.photo);
+                        });
+                }
             })
             .catch((error) => {
                 const errorCode = error.code;
