@@ -11,6 +11,7 @@ import { setActiveRoom, setRooms } from "./reducer.js";
 function App({ user, setActiveRoom, rooms }) {
     return (
         <div className="app">
+                <h1>NOT THE REAL WHATSAPP</h1>
             <div className="app__body">
                 {!user.email ? (
                     <Login />

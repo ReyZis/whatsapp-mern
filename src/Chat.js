@@ -40,11 +40,14 @@ function Chat({ activeRoom, user, roomName, roomPic }) {
 
     const sendMessage = async (e) => {
         e.preventDefault();
-        await axios.post("/messages/new", {
-            name: user.displayName,
-            message: input,
-            _id: activeRoom,
-        });
+
+        input &&
+            (await axios.post("/messages/new", {
+                name: user.displayName,
+                message: input,
+                _id: activeRoom,
+            }));
+
         setInput("");
     };
 

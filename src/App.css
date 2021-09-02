@@ -4,7 +4,9 @@
     height: 100vh;
     background-color: #dadbd3;
 }
-
+.app > h1 {
+    margin-bottom: 30px;
+}
 .app__body {
     display: flex;
     background-color: #ededed;
